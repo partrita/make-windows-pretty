@@ -1,7 +1,8 @@
 # Window Manager Setup
 
-- [GlazeWM](https://github.com/glzr-io/glazewm)
-- [GlazeWM Config File](./config.yaml)
+- [GlazeWM](https://github.com/glzr-io/glazewm): A tiling window manager for Windows.
+- [GlazeWM Config File](./config.yaml): The main configuration file for GlazeWM.
+- `private-build-plans.toml`: This file might be related to custom builds or plugin management for GlazeWM.
 
 ## 설치법
 
@@ -15,7 +16,7 @@ scoop install glazewm
 
 # TopBar Setup
 
-- [Zebar](https://github.com/glzr-io/zebar)
+- [Zebar](https://github.com/glzr-io/zebar): A status bar for GlazeWM.
 
 To configure Zebar:
 
@@ -26,6 +27,8 @@ cp ./vanilla-clear/ ~/.glzr/zebar/
 ```
 
 2. Than disable other widgets in Zebar system tray.
+
+The `vanilla-clear` widget provides a clean and minimalist look for your status bar.
 
 ### Old Zebar config
 
