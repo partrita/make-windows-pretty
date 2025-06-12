@@ -1,0 +1,116 @@
+;; Use Capslock key for Hangul input and swap Alt-Ctrl keys for more ergonomic typing
+;; Press Left Control + Space + Escape to exit the program
+
+;; Base layout
+(defsrc
+  esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+;; Define Hangul key for Windows
+(deflocalkeys-win
+  han 21
+)
+
+;; Define Hangul key for Linux (using right Alt)
+(deflocalkeys-linux
+  han 100 ;; alt_r
+)
+
+(defvar
+  ;; Define timing variables for tap and hold actions
+  tap-time 200
+  hold-time 200
+)
+
+(defalias
+  ;; Define layer toggle aliases
+  nav (layer-toggle nav)
+  win (layer-switch win)
+  mac (layer-switch mac)
+  col (layer-switch col)  
+
+  ;; Create a tap-hold key: tap for space, hold for navigation layer
+  spl (tap-hold-release $tap-time $hold-time spc @nav)
+
+  ;; Create a tap-hold key: tap for Hangul, hold for Caps Lock
+  cap (tap-hold-release $tap-time 2000 han caps)
+
+  ;; Remap Left Control to work as Alt+Tab in MacOS layout
+  lctl (multi lctl
+       (layer-while-held l-lctl)
+       (on-release release-vkey v-lalt))
+
+  ;; Define home-row shift keys
+  f (tap-hold $tap-time $hold-time f lsft)
+  j (tap-hold $tap-time $hold-time j rsft)
+
+  ;; Define mouse movement actions with linear acceleration
+  ;; Parameters: interval, ramp-up time, min distance, max distance
+  ma↑ (movemouse-accel-up 1 1000 1 5)
+  ma← (movemouse-accel-left 1 1000 1 5)
+  ma↓ (movemouse-accel-down 1 1000 1 5)
+  ma→ (movemouse-accel-right 1 1000 1 5)
+  
+  ;; Define mouse wheel actions
+  ;; Parameters: interval, distance (120 units = 1 notch on physical wheel)
+  mwu (mwheel-up 50 120)
+  mwd (mwheel-down 50 120)
+  mwl (mwheel-left 50 120)
+  mwr (mwheel-right 50 120)
+) 
+
+;; Define Windows layout
+(deflayer win
+  esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  han  a    s    d    f    g    h     j   k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /   rsft
+  lctl lmet lalt          @spl            ralt rmet rctl
+)
+
+;; Define MacOS layout
+(deflayer mac
+  esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  han  a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /   rsft
+  lalt lmet @lctl         @spl           ralt rmet rctl
+)
+
+;; Define Colemak layout
+(deflayer col
+  esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    f    p    b    j    l    u    y    ;    [    ]    \
+  han  a    r    s    t    g    m    n    e    i    o    '    ret
+  lsft z    x    c    d    v    k    h    ,    .    /   rsft
+  lalt lmet @lctl          @spl           ralt rmet rctl
+)
+
+;; Define navigation layer (reduces left pinky RSI by using function keys for punctuation)
+(deflayer nav
+  del  bspc -    =    [    ]    \    '    /    f9   f10  f11  f12
+  lrld @win @mac @col XX   XX   XX   XX   XX   XX   XX   XX   XX   _
+  _    mlft @ma↑ mrgt @mwu XX   XX   XX   XX   XX   XX   XX   XX   XX
+  XX   @ma← @ma↓ @ma→ @mwd XX   left down up   rght XX   XX   _    
+  _    XX   XX   XX   XX   XX   home pgdn pgup end XX   _
+  _    _    _              _              _    _    _ 
+)
+
+;; Remap Ctrl+Tab to work as Alt+Tab
+(defvirtualkeys v-lalt lalt)
+
+(deflayermap (l-lctl)
+ tab (fork (multi lalt
+            (on-press press-vkey v-lalt)
+            (release-key lctl)
+            tab)
+           tab
+           (lalt)))

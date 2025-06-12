@@ -1,0 +1,245 @@
+general:
+  # WM(윈도우 매니저) 시작 시 실행할 명령어. 스크립트 실행이나 다른 애플리케이션 실행에 유용함.
+  # 예시: 아래 명령은 Zebar를 실행함.
+  startup_commands: ['shell-exec zebar']
+
+  # WM 종료 직전 실행할 명령어.
+  # 예시: 아래 명령은 Zebar를 종료함.
+  shutdown_commands: ['shell-exec taskkill /IM zebar.exe /F']
+
+  # WM 설정 파일을 다시 불러올 때 실행할 명령어.
+  config_reload_commands: []
+
+  # 커서 아래에 있는 윈도우에 자동으로 포커스할지 여부.
+  focus_follows_cursor: false
+
+  # 현재 워크스페이스에 포커스할 때 이전에 포커스했던 워크스페이스로 전환할지 여부.
+  toggle_workspace_on_refocus: false
+
+  cursor_jump:
+    # 지정된 트리거에 따라 커서를 자동으로 이동할지 여부.
+    enabled: true
+
+    # 커서 점프 트리거:
+    # - 'monitor_focus': 모니터 간 포커스가 바뀔 때 점프.
+    # - 'window_focus': 윈도우 간 포커스가 바뀔 때 점프.
+    trigger: 'window_focus'
+
+  # 워크스페이스 전환 시 윈도우를 어떻게 숨길지.
+  # - 'cloak': 권장. 애니메이션 없이 윈도우를 숨기고, 작업 표시줄에는 계속 표시.
+  # - 'hide': 레거시 방식(v3.5 이하). 짧은 애니메이션이 있지만 일부 앱과 호환성 문제 있음.
+  hide_method: 'cloak'
+
+gaps:
+  # 모니터 DPI에 따라 간격을 조정할지 여부.
+  scale_with_dpi: true
+
+  # 인접한 윈도우 사이의 간격.
+  inner_gap: '5px'
+
+  # 윈도우와 화면 가장자리 사이의 간격.
+  outer_gap:
+    top: '40x'
+    right: '5px'
+    bottom: '5px'
+    left: '5px'
+
+window_effects:
+  # 포커스된 윈도우에 적용할 시각 효과.
+  focused_window:
+    # 색상 테두리로 윈도우 강조.
+    # ** Windows 11 전용(API 제한).
+    border:
+      enabled: true
+      color: '#2CFF05'
+
+    # 윈도우 프레임에서 타이틀 바 제거. 일부 애플리케이션에서 렌더링 문제가 발생할 수 있음.
+    hide_title_bar:
+      enabled: false
+
+    # 윈도우 프레임의 모서리 스타일 변경.
+    # ** Windows 11 전용(API 제한).
+    corner_style:
+      enabled: false
+      # 허용 값: 'square', 'rounded', 'small_rounded'.
+      style: 'square'
+
+  # 포커스되지 않은 윈도우에 적용할 시각 효과.
+  other_windows:
+    border:
+      enabled: true
+      color: '#2B332A'
+    hide_title_bar:
+      enabled: false
+    corner_style:
+      enabled: false
+      style: 'square'
+
+window_behavior:
+  # 가능한 경우 새 윈도우가 생성될 때 상태.
+  # 허용 값: 'tiling', 'floating'.
+  initial_state: 'tiling'
+
+  # 새 윈도우 생성 시 기본 옵션 설정. state change 명령(예: `set-floating`)에서 플래그 없이 사용할 때의 기본값도 변경됨.
+  state_defaults:
+    floating:
+      # 플로팅 윈도우를 기본적으로 가운데 정렬할지 여부.
+      centered: true
+
+      # 플로팅 윈도우를 항상 위에 표시할지 여부.
+      shown_on_top: false
+
+    fullscreen:
+      # 가능한 경우 윈도우를 최대화. 최대화 버튼이 없다면 일반적으로 전체화면으로 전환.
+      maximized: false
+
+      # 전체화면 윈도우를 항상 위에 표시할지 여부.
+      shown_on_top: false
+
+workspaces:
+  - name: '1'
+  - name: '2'
+  - name: '3'
+
+window_rules:
+  - commands: ['ignore']
+    match:
+      # Zebar 윈도우는 무시.
+      - window_process: { equals: 'zebar' }
+      - window_process:
+          { regex: "Taskmgr|ScreenClippingHost|premeeng|explorer" }
+      - window_process: { equals: 'PyMOL' }
+
+      # 브라우저의 PIP(화면 속 화면) 윈도우 무시.
+      - window_title: { regex: '[Pp]icture.in.[Pp]icture' }
+        window_class: { regex: 'Chrome_WidgetWin_1|MozillaDialogClass' }
+      - window_title: { equals: "Setup" }
+
+      # 다양한 서드파티 앱 무시 규칙.
+      - window_process: { equals: 'PowerToys' }
+        window_class: { regex: 'HwndWrapper\[PowerToys\.PowerAccent.*?\]' }
+      - window_process: { equals: 'PowerToys' }
+        window_title: { regex: '.*? - Peek' }
+      - window_process: { equals: 'Lively' }
+        window_class: { regex: 'HwndWrapper' }
+
+binding_modes:
+  # 활성화 시 포커스된 윈도우를 화살표 키 또는 HJKL로 리사이즈 가능.
+  - name: 'resize'
+    keybindings:
+      - commands: ['resize --width -2%']
+        bindings: ['h', 'left']
+      - commands: ['resize --width +2%']
+        bindings: ['l', 'right']
+      - commands: ['resize --height +2%']
+        bindings: ['k', 'up']
+      - commands: ['resize --height -2%']
+        bindings: ['j', 'down']
+      # 엔터/이스케이프를 눌러 기본 키 바인딩으로 복귀.
+      - commands: ['wm-disable-binding-mode --name resize']
+        bindings: ['escape']
+
+  # 활성화 시 alt+shift+p를 제외한 모든 키 바인딩이 비활성화됨. 기본 키 바인딩으로 복귀.
+  - name: 'pause'
+    keybindings:
+      - commands: ['wm-disable-binding-mode --name pause']
+        bindings: ['alt+shift+p']
+
+keybindings:
+  # 지정된 방향으로 포커스 이동.
+  - commands: ['focus --direction left']
+    bindings: ['alt+h']
+  - commands: ['focus --direction right']
+    bindings: ['alt+l']
+  - commands: ['focus --direction up']
+    bindings: ['alt+k']
+  - commands: ['focus --direction down']
+    bindings: ['alt+j']
+
+  # 포커스된 윈도우를 지정된 방향으로 이동.
+  - commands: ['move --direction left']
+    bindings: ['alt+shift+h', 'alt+shift+left']
+  - commands: ['move --direction right']
+    bindings: ['alt+shift+l', 'alt+shift+right']
+  - commands: ['move --direction up']
+    bindings: ['alt+shift+k', 'alt+shift+up']
+  - commands: ['move --direction down']
+    bindings: ['alt+shift+j', 'alt+shift+down']
+
+  # 리사이즈 모드에서 화살표 키 또는 HJKL로 리사이즈 가능. 바인딩 모드는 위의 'resize'에서 정의됨.
+  - commands: ['wm-enable-binding-mode --name resize']
+    bindings: ['alt+ctrl+r']
+
+  # alt+shift+p를 다시 누를 때까지 모든 키 바인딩이 비활성화됨.
+  - commands: ['wm-enable-binding-mode --name pause']
+    bindings: ['alt+shift+p']
+
+  # 타일링 방향 변경. 새 타일링 윈도우가 삽입될 위치 결정.
+  - commands: ['toggle-tiling-direction']
+    bindings: ['alt+shift+v']
+
+  # 타일링 윈도우 -> 플로팅 -> 전체화면 순으로 포커스 변경.
+  - commands: ['wm-cycle-focus']
+    bindings: ['alt+shift+space']
+
+  # 포커스된 윈도우를 플로팅 모드로 전환.
+  - commands: ['toggle-floating --centered']
+    bindings: ['alt+shift+c']
+
+  # 포커스된 윈도우를 타일링 모드로 전환.
+  #- commands: ['toggle-tiling']
+  #  bindings: ['alt+ctrl+t']
+
+  # 포커스된 윈도우를 전체화면 모드로 전환.
+  - commands: ['toggle-fullscreen']
+    bindings: ['alt+f']
+
+  # 포커스된 윈도우를 최소화.
+  - commands: ['toggle-minimized']
+    bindings: ['alt+m']
+
+  # 포커스된 윈도우를 닫음.
+  - commands: ['close']
+    bindings: ['ctrl+q']
+
+  # GlazeWM 프로세스를 안전하게 종료.
+  - commands: ['wm-exit']
+    bindings: ['alt+shift+q']
+
+  # 설정 파일을 다시 평가.
+  - commands: ['wm-reload-config']
+    bindings: ['alt+shift+r']
+
+  # 모든 윈도우를 다시 그림.
+  - commands: ['wm-redraw']
+    bindings: ['alt+shift+d']
+
+  # 마지막으로 포커스했던 워크스페이스로 이동.
+  #- commands: ['focus --recent-workspace']
+  #  bindings: ['alt+ctrl+d']
+
+  # `workspaces` 설정에 정의된 워크스페이스로 포커스 이동.
+  - commands: ['focus --workspace 1']
+    bindings: ['alt+1']
+  - commands: ['focus --workspace 2']
+    bindings: ['alt+2']
+  - commands: ['focus --workspace 3']
+    bindings: ['alt+3']
+
+  # 포커스된 윈도우의 부모 워크스페이스를 지정된 방향의 모니터로 이동.
+  - commands: ['move-workspace --direction left']
+    bindings: ['alt+ctrl+h']
+  - commands: ['move-workspace --direction right']
+    bindings: ['alt+ctrl+l']
+  - commands: ['move-workspace --direction up']
+    bindings: ['alt+ctrl+k']
+  - commands: ['move-workspace --direction down']
+    bindings: ['alt+ctrl+j']
+
+  # 포커스된 윈도우를 `workspaces` 설정에 정의된 워크스페이스로 이동.
+  - commands: ['move --workspace 1', 'focus --workspace 1']
+    bindings: ['alt+shift+1']
+  - commands: ['move --workspace 2', 'focus --workspace 2']
+    bindings: ['alt+shift+2']
+  - commands: ['move --workspace 3', 'focus --workspace 3']
+    bindings: ['alt+shift+3']
