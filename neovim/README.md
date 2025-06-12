@@ -1,3 +1,9 @@
+# Neovim 개인 설정 (Personal Neovim Setup)
+
+이 디렉토리는 [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)을 기반으로 하는 개인 Neovim 설정을 관리하기 위한 것입니다.
+kickstart.nvim을 클론하여 이 저장소에 포함시키고, 개인적인 필요에 맞게 설정을 추가하거나 수정하여 사용합니다.
+실제 Neovim 설정 파일 (`init.lua` 등)은 Neovim의 표준 설정 경로 (예: `~/.config/nvim` 또는 `%LOCALAPPDATA%\nvim`)에 위치하게 되며, 이 README는 해당 설정을 구축하고 관리하기 위한 가이드 및 kickstart.nvim 관련 주요 사항을 기록하는 역할을 합니다.
+
 # neovim
 
 [neovim](https://neovim.io) is hyperextensible Vim-based text editor.
@@ -34,9 +40,11 @@
 scoop install neovim
 ```
 
-# kickstart.nvim
+# kickstart.nvim 기반 설정
 
-[github-repo](https://github.com/nvim-lua/kickstart.nvim)
+이 Neovim 설정은 [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)을 기반으로 합니다. kickstart.nvim은 Neovim을 시작하기 위한 작고, 단일 파일로 구성된, 문서화가 잘 된 시작점입니다. 이 저장소에서는 kickstart.nvim을 가져와 개인 설정을 추가하여 사용합니다.
+
+kickstart.nvim 원본 저장소: [https://github.com/nvim-lua/kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
 
 ## Introduction
 
@@ -59,22 +67,14 @@ If you are experiencing issues, please make sure you have the latest versions.
 
 ### Install External Dependencies
 
-External Requirements:
-- Basic utils: `git`, `make`, `unzip`, C Compiler (`gcc`)
-- [ripgrep](https://github.com/BurntSushi/ripgrep#installation),
-  [fd-find](https://github.com/sharkdp/fd#installation)
-- Clipboard tool (xclip/xsel/win32yank or other depending on the platform)
-- A [Nerd Font](https://www.nerdfonts.com/): optional, provides various icons
-  - if you have it set `vim.g.have_nerd_font` in `init.lua` to true
-- Emoji fonts (Ubuntu only, and only if you want emoji!) `sudo apt install fonts-noto-color-emoji`
-- Language Setup:
-  - If you want to write Typescript, you need `npm`
-  - If you want to write Golang, you will need `go`
-  - etc.
+kickstart.nvim을 사용하기 위해서는 몇 가지 외부 의존성 프로그램이 필요합니다. 주요 의존성은 다음과 같습니다:
+- 기본 유틸리티: `git`, `make`, `unzip`, C 컴파일러 (`gcc`)
+- 검색 도구: [ripgrep](https://github.com/BurntSushi/ripgrep#installation), [fd-find](https://github.com/sharkdp/fd#installation)
+- 클립보드 도구: 운영체제에 따라 `xclip`, `xsel`, `win32yank` 등
+- [Nerd Font](https://www.nerdfonts.com/): 선택 사항이지만, 다양한 아이콘을 표시하기 위해 권장됩니다.
+- 기타 프로그래밍 언어별 도구 (예: Typescript를 위한 `npm`, Golang을 위한 `go` 등)
 
-> [!NOTE]
-> See [Install Recipes](#Install-Recipes) for additional Windows and Linux specific notes
-> and quick install snippets
+자세한 최신 의존성 목록 및 OS별 설치 방법은 공식 [kickstart.nvim 문서의 설치 가이드](https://github.com/nvim-lua/kickstart.nvim#install-external-dependencies)를 참조하십시오. 이 README에서는 기본적인 복제 및 설정 적용 방법을 안내합니다.
 
 ### Install Kickstart
 
@@ -190,89 +190,6 @@ examples of adding popularly requested plugins.
 
 ### Install Recipes
 
-Below you can find OS specific install instructions for Neovim and dependencies.
+OS별 특정 의존성 설치 방법은 공식 [kickstart.nvim 문서](https://github.com/nvim-lua/kickstart.nvim#install-recipes)에 자세히 설명되어 있습니다. 이 문서에서는 해당 내용을 중복하여 다루지 않으므로, 필요한 경우 원본 문서를 참조하십시오.
 
-After installing all the dependencies continue with the [Install Kickstart](#Install-Kickstart) step.
-
-#### Windows Installation
-
-<details><summary>Windows with Microsoft C++ Build Tools and CMake</summary>
-Installation may require installing build tools and updating the run command for `telescope-fzf-native`
-
-See `telescope-fzf-native` documentation for [more details](https://github.com/nvim-telescope/telescope-fzf-native.nvim#installation)
-
-This requires:
-
-- Install CMake and the Microsoft C++ Build Tools on Windows
-
-```lua
-{'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
-```
-</details>
-<details><summary>Windows with gcc/make using chocolatey</summary>
-Alternatively, one can install gcc and make which don't require changing the config,
-the easiest way is to use choco:
-
-1. install [chocolatey](https://chocolatey.org/install)
-either follow the instructions on the page or use winget,
-run in cmd as **admin**:
-```
-winget install --accept-source-agreements chocolatey.chocolatey
-```
-
-2. install all requirements using choco, exit the previous cmd and
-open a new one so that choco path is set, and run in cmd as **admin**:
-```
-choco install -y neovim git ripgrep wget fd unzip gzip mingw make
-```
-</details>
-<details><summary>WSL (Windows Subsystem for Linux)</summary>
-
-```
-wsl --install
-wsl
-sudo add-apt-repository ppa:neovim-ppa/unstable -y
-sudo apt update
-sudo apt install make gcc ripgrep unzip git xclip neovim
-```
-</details>
-
-#### Linux Install
-<details><summary>Ubuntu Install Steps</summary>
-
-```
-sudo add-apt-repository ppa:neovim-ppa/unstable -y
-sudo apt update
-sudo apt install make gcc ripgrep unzip git xclip neovim
-```
-</details>
-<details><summary>Debian Install Steps</summary>
-
-```
-sudo apt update
-sudo apt install make gcc ripgrep unzip git xclip curl
-
-# Now we install nvim
-curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-sudo rm -rf /opt/nvim-linux-x86_64
-sudo mkdir -p /opt/nvim-linux-x86_64
-sudo chmod a+rX /opt/nvim-linux-x86_64
-sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-
-# make it available in /usr/local/bin, distro installs to /usr/bin
-sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/
-```
-</details>
-<details><summary>Fedora Install Steps</summary>
-
-```
-sudo dnf install -y gcc make git ripgrep fd-find unzip neovim
-```
-</details>
-
-<details><summary>Arch Install Steps</summary>
-
-```
-sudo pacman -S --noconfirm --needed gcc make git ripgrep fd unzip neovim
-```
-</details>
+모든 외부 의존성이 준비되면 아래의 "Install Kickstart" 단계를 진행하여 설정을 복제합니다.
