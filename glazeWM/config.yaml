@@ -100,6 +100,10 @@ workspaces:
   - name: '1'
   - name: '2'
   - name: '3'
+  - name: '4'
+  - name: '5'
+  - name: '6'
+  - name: '7'
 
 window_rules:
   - commands: ['ignore']
@@ -179,12 +183,12 @@ keybindings:
     bindings: ['alt+shift+v']
 
   # 타일링 윈도우 -> 플로팅 -> 전체화면 순으로 포커스 변경.
-  - commands: ['wm-cycle-focus']
-    bindings: ['alt+shift+space']
+  #- commands: ['wm-cycle-focus']
+  #  bindings: ['alt+ctrl+shift+space']
 
   # 포커스된 윈도우를 플로팅 모드로 전환.
   - commands: ['toggle-floating --centered']
-    bindings: ['alt+shift+c']
+    bindings: ['alt+shift+space']
 
   # 포커스된 윈도우를 타일링 모드로 전환.
   #- commands: ['toggle-tiling']
@@ -216,7 +220,7 @@ keybindings:
 
   # 마지막으로 포커스했던 워크스페이스로 이동.
   #- commands: ['focus --recent-workspace']
-  #  bindings: ['alt+ctrl+d']
+  #  bindings: ['alt+shift+u']
 
   # `workspaces` 설정에 정의된 워크스페이스로 포커스 이동.
   - commands: ['focus --workspace 1']
@@ -225,6 +229,14 @@ keybindings:
     bindings: ['alt+2']
   - commands: ['focus --workspace 3']
     bindings: ['alt+3']
+  - commands: ['focus --workspace 4']
+    bindings: ['alt+4']  
+  - commands: ['focus --workspace 5']
+    bindings: ['alt+5']
+  - commands: ['focus --workspace 6']
+    bindings: ['alt+6']
+  - commands: ['focus --workspace 7']
+    bindings: ['alt+7']
 
   # 포커스된 윈도우의 부모 워크스페이스를 지정된 방향의 모니터로 이동.
   - commands: ['move-workspace --direction left']
@@ -243,3 +255,11 @@ keybindings:
     bindings: ['alt+shift+2']
   - commands: ['move --workspace 3', 'focus --workspace 3']
     bindings: ['alt+shift+3']
+  - commands: ['move --workspace 1', 'focus --workspace 4']
+    bindings: ['alt+shift+4']
+  - commands: ['move --workspace 2', 'focus --workspace 5']
+    bindings: ['alt+shift+5']
+  - commands: ['move --workspace 3', 'focus --workspace 6']
+    bindings: ['alt+shift+6']
+  - commands: ['move --workspace 3', 'focus --workspace 7']
+    bindings: ['alt+shift+7']
