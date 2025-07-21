@@ -4,9 +4,6 @@
 kickstart.nvim을 클론하여 이 저장소에 포함시키고, 개인적인 필요에 맞게 설정을 추가하거나 수정하여 사용합니다.
 실제 Neovim 설정 파일 (`init.lua` 등)은 Neovim의 표준 설정 경로 (예: `~/.config/nvim` 또는 `%LOCALAPPDATA%\nvim`)에 위치하게 되며, 이 README는 해당 설정을 구축하고 관리하기 위한 가이드 및 kickstart.nvim 관련 주요 사항을 기록하는 역할을 합니다.
 
-# neovim
->>>>>>> 1f16fe40435993fa18071050ab81ef03d9947290
-
 ## Scoop을 사용한 필수 구성 요소 설치
 
 Scoop을 사용하여 Neovim, Git, ripgrep, wget, fd, unzip, gzip 및 gcc, make를 설치할 수 있습니다. gcc와 make는 'versions' 버킷에 포함되어 있습니다.
